@@ -13,44 +13,31 @@ const productos = [
 
 const carrito = [];
 
-document.addEventListener('DOMContentLoaded', () => {
-    mostrarProductos(productos);
-
-    const filtroInput = document.getElementById('filtro');
-    filtroInput.addEventListener('input', filtrarProductos);
-});
-
 function mostrarProductos(productosMostrados) {
     const listaProductos = document.getElementById('lista-productos');
-
-    if (!listaProductos) {
-        console.error("Elemento con ID 'lista-productos' no encontrado.");
-        return;
-    }
-
     listaProductos.innerHTML = '';
 
     productosMostrados.forEach(producto => {
-        const divProducto = document.createElement('div');
-        divProducto.classList.add('producto');
+    const divProducto = document.createElement('div');
+    divProducto.classList.add('producto');
 
-        const imagen = document.createElement('img');
-        imagen.src = producto.imagen;
-        imagen.alt = producto.nombre;
+    const imagen = document.createElement('img');
+    imagen.src = producto.imagen;
+    imagen.alt = producto.nombre;
 
-        const nombrePrecio = document.createElement('div');
-        nombrePrecio.textContent = `${producto.nombre} - $${producto.precio}`;
+    const nombrePrecio = document.createElement('div');
+    nombrePrecio.textContent = `${producto.nombre} - $${producto.precio}`;
 
-        const botonAgregar = document.createElement('button');
-        botonAgregar.textContent = 'Agregar al carrito';
-        botonAgregar.addEventListener('click', () => agregarAlCarrito(producto));
+    const botonAgregar = document.createElement('button');
+    botonAgregar.textContent = 'Agregar al carrito';
+    botonAgregar.onclick = () => agregarAlCarrito(producto);
 
-        divProducto.appendChild(imagen);
-        divProducto.appendChild(nombrePrecio);
-        divProducto.appendChild(botonAgregar);
-
-        listaProductos.appendChild(divProducto);
-    });
+    divProducto.appendChild(imagen);
+    divProducto.appendChild(nombrePrecio);
+    divProducto.appendChild(botonAgregar);
+    listaProductos.appendChild(divProducto);
+    
+});
 
     console.log('Productos mostrados en la lista.');
 }
@@ -67,8 +54,8 @@ function agregarAlCarrito(producto) {
 
 function mostrarCarrito() {
     const resumenCarrito = carrito.reduce((resumen, item) => {
-        return `${resumen}${item.nombre} - $${item.precio} x${item.cantidad}\n`;
-    }, 'Carrito de Compras:\n');
+    return `${resumen}${item.nombre} - $${item.precio} x${item.cantidad}\n`;
+}, 'Carrito de Compras:\n');
 
     console.log('Resumen del carrito:');
     console.log(resumenCarrito);
@@ -83,3 +70,5 @@ function filtrarProductos() {
 
     console.log(`Productos filtrados por: ${filtro}`);
 }
+
+mostrarProductos(productos);
