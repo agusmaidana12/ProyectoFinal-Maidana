@@ -1,14 +1,14 @@
 const productos = [
-    { id: 1, nombre: 'PlayStation 5', precio: 850000, imagen: '../img/play5.png' },
-    { id: 2, nombre: 'PlayStation 4', precio: 459000, imagen: '../img/play4.png' },
-    { id: 3, nombre: 'Iphone 14 Pro Max', precio: 900000, imagen: '../img/iphone14.png' },
-    { id: 4, nombre: 'Pc Gamer', precio: 719000, imagen: '../img/pcgamer.png' },
-    { id: 5, nombre: 'Procesador i9', precio: 725000, imagen: '../img/procesador.png' },
-    { id: 6, nombre: 'Mouse Razer', precio: 50000, imagen: '../img/mouse.png' },
-    { id: 7, nombre: 'Fifa 23', precio: 45000 , imagen: '../img/fifa23.jpg' },
-    { id: 8, nombre: 'Iphone 15 Pro Max', precio: 0, imagen: '../img/iphone15.png' },
-    { id: 9, nombre: 'Silla Gamer', precio: 110000, imagen: '../img/sillagamer.png' },
-    { id: 10, nombre: 'Motherboard Asus H610', precio: 170.000, imagen: '../img/mother.png' },
+    { id: 1, nombre: 'PlayStation 5', precio: 850000, imagen: 'img/play5.png' },
+    { id: 2, nombre: 'PlayStation 4', precio: 459000, imagen: 'img/play4.png' },
+    { id: 3, nombre: 'Iphone 14 Pro Max', precio: 900000, imagen: 'img/iphone14.png' },
+    { id: 4, nombre: 'Pc Gamer', precio: 719000, imagen: '/img/pcgamer.png' },
+    { id: 5, nombre: 'Procesador i9', precio: 725000, imagen: '/img/procesador.png' },
+    { id: 6, nombre: 'Mouse Razer', precio: 50000, imagen: '/img/mouse.png' },
+    { id: 7, nombre: 'Fifa 23', precio: 45000 , imagen: '/img/fifa23.jpg' },
+    { id: 8, nombre: 'Iphone 15 Pro Max', precio: 0, imagen: '/img/iphone15.png' },
+    { id: 9, nombre: 'Silla Gamer', precio: 110000, imagen: '/img/sillagamer.png' },
+    { id: 10, nombre: 'Motherboard Asus H610', precio: 170.000, imagen: '/img/mother.png' },
 ];
 
 const carrito = [];
