@@ -1,6 +1,6 @@
 const moneda = 'US$';
 let carrito = [];
-let productos = []; // Asegúrate de definir la variable productos globalmente
+let productos = []; 
 let carritoVisible = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -28,7 +28,7 @@ async function cargarProductos() {
             throw new Error('Error al cargar productos');
         }
 
-        productos = await response.json(); // Actualiza el nombre de la variable
+        productos = await response.json(); 
         mostrarProductos(productos);
 
         console.log('Productos cargados desde el archivo JSON.');
