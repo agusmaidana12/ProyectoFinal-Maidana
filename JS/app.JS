@@ -1,69 +1,86 @@
-const productos = [
-    { id: 1, nombre: 'PlayStation 5', precio: 500, imagen: 'img/play5.png' },
-    { id: 2, nombre: 'PlayStation 4', precio: 299, imagen: 'img/play4.png' },
-    { id: 3, nombre: 'Iphone 14 Pro Max', precio: 1200, imagen: 'img/iphone14.png' },
-    { id: 4, nombre: 'Pc Gamer', precio: 700, imagen: 'img/pcgamer.png' },
-    { id: 5, nombre: 'Procesador i9', precio: 800, imagen: 'img/procesador.png' },
-    { id: 6, nombre: 'Mouse Razer', precio: 200, imagen: 'img/mouse.png' },
-    { id: 7, nombre: 'Fifa 23', precio: 60, imagen: 'img/fifa23.jpg' },
-    { id: 8, nombre: 'Iphone 15 Pro Max', precio: 1700, imagen: 'img/iphone15.png' },
-    { id: 9, nombre: 'Silla Gamer', precio: 290, imagen: 'img/sillagamer.png' },
-    { id: 10, nombre: 'Motherboard Asus H610', precio: 250, imagen: 'img/mother.png' },
-];
 const moneda = 'US$';
 let carrito = [];
+let productos = []; // Asegúrate de definir la variable productos globalmente
+let carritoVisible = false;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const carritoGuardado = localStorage.getItem('carrito');
     if (carritoGuardado) {
         carrito = JSON.parse(carritoGuardado);
-}
+    }
 
-mostrarProductos(productos);
+    await cargarProductos();
 
-const filtroInput = document.getElementById('filtro');
-filtroInput.addEventListener('input', filtrarProductos);
+    const filtroInput = document.getElementById('filtro');
+    filtroInput.addEventListener('input', filtrarProductos);
 
-const verCarritoBtn = document.getElementById('verCarrito');
-verCarritoBtn.addEventListener('click', toggleCarrito);
+    const verCarritoBtn = document.getElementById('verCarrito');
+    verCarritoBtn.addEventListener('click', () => {
+        carritoVisible = !carritoVisible;
+        toggleCarrito();
+    });
 });
+
+async function cargarProductos() {
+    try {
+        const response = await fetch('productos.json');
+        if (!response.ok) {
+            throw new Error('Error al cargar productos');
+        }
+
+        productos = await response.json(); // Actualiza el nombre de la variable
+        mostrarProductos(productos);
+
+        console.log('Productos cargados desde el archivo JSON.');
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al cargar productos. Por favor, intenta de nuevo.',
+        });
+    }
+}
 
 function mostrarProductos(productosMostrados) {
     const listaProductos = document.getElementById('lista-productos');
     listaProductos.innerHTML = '';
 
     productosMostrados.forEach(producto => {
-    const divProducto = document.createElement('div');
-    divProducto.classList.add('producto');
+        const divProducto = document.createElement('div');
+        divProducto.classList.add('producto');
 
-const imagen = document.createElement('img');
-    imagen.src = producto.imagen;
-    imagen.alt = producto.nombre;
+        const imagen = document.createElement('img');
+        imagen.src = producto.imagen;
+        imagen.alt = producto.nombre;
 
-    const nombrePrecio = document.createElement('div');
-    nombrePrecio.textContent = `${producto.nombre} - ${moneda}${producto.precio}`;
+        const nombrePrecio = document.createElement('div');
+        nombrePrecio.textContent = `${producto.nombre} - ${moneda}${producto.precio}`;
 
-    const botonAgregar = document.createElement('button');
-    botonAgregar.textContent = 'Agregar al carrito';
-    botonAgregar.addEventListener('click', () => agregarAlCarrito(producto));
+        const botonAgregar = document.createElement('button');
+        botonAgregar.textContent = 'Agregar al carrito';
+        botonAgregar.addEventListener('click', () => agregarAlCarrito(producto));
 
-    divProducto.appendChild(imagen);
-    divProducto.appendChild(nombrePrecio);
-    divProducto.appendChild(botonAgregar);
+        divProducto.appendChild(imagen);
+        divProducto.appendChild(nombrePrecio);
+        divProducto.appendChild(botonAgregar);
 
-    listaProductos.appendChild(divProducto);
-});
-console.log('Productos mostrados en la lista.');
+        listaProductos.appendChild(divProducto);
+    });
+
+    console.log('Productos mostrados en la lista.');
 }
 
 function agregarAlCarrito(producto) {
-    const productoEnCarrito = carrito.find(item => item.id === producto.id);
+    const { id, nombre, cantidad } = producto;
+    const productoEnCarrito = carrito.find(item => item.id === id);
+
     if (productoEnCarrito) {
         productoEnCarrito.cantidad += 1;
-    }else{
-    carrito.push({ ...producto, cantidad: 1 });
-}
-console.log(`Agregado al carrito: ${producto.nombre}`);
+    } else {
+        carrito.push({ ...producto, cantidad: 1 });
+    }
+    console.log(`Agregado al carrito: ${nombre}`);
     actualizarCarritoEnStorage();
     mostrarCarrito();
     actualizarContadorCarrito();
@@ -73,7 +90,7 @@ function toggleCarrito() {
     const carritoResumen = document.getElementById('carrito-resumen');
     carritoResumen.innerHTML = '';
 
-    if (carrito.length > 0) {
+    if (carritoVisible && carrito.length > 0) {
         carrito.forEach(item => {
             const itemCarrito = document.createElement('div');
             itemCarrito.classList.add('item-carrito');
@@ -89,27 +106,27 @@ function toggleCarrito() {
             itemCarrito.appendChild(botonQuitar);
 
             carritoResumen.appendChild(itemCarrito);
-});
+        });
 
-    const totalCarrito = carrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
+        const totalCarrito = carrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
 
-    const totalCarritoElement = document.createElement('div');
-    totalCarritoElement.textContent = `Total: ${moneda}${totalCarrito}`;
+        const totalCarritoElement = document.createElement('div');
+        totalCarritoElement.textContent = `Total: ${moneda}${totalCarrito}`;
 
-    const confirmarCompraBtn = document.createElement('button');
-    confirmarCompraBtn.textContent = 'Confirmar Compra';
-    confirmarCompraBtn.addEventListener('click', confirmarCompra);
+        const confirmarCompraBtn = document.createElement('button');
+        confirmarCompraBtn.textContent = 'Confirmar Compra';
+        confirmarCompraBtn.addEventListener('click', confirmarCompra);
 
-    const cancelarCompraBtn = document.createElement('button');
-    cancelarCompraBtn.textContent = 'Cancelar Compra';
-    cancelarCompraBtn.addEventListener('click', cancelarCompra);
+        const cancelarCompraBtn = document.createElement('button');
+        cancelarCompraBtn.textContent = 'Cancelar Compra';
+        cancelarCompraBtn.addEventListener('click', cancelarCompra);
 
-    carritoResumen.appendChild(totalCarritoElement);
-    carritoResumen.appendChild(confirmarCompraBtn);
-    carritoResumen.appendChild(cancelarCompraBtn);
-}
+        carritoResumen.appendChild(totalCarritoElement);
+        carritoResumen.appendChild(confirmarCompraBtn);
+        carritoResumen.appendChild(cancelarCompraBtn);
+    }
 
-carritoResumen.style.display = 'block'; // Mostrar el carrito
+    carritoResumen.style.display = carritoVisible && carrito.length > 0 ? 'block' : 'none';
     actualizarContadorCarrito();
 }
 
@@ -124,18 +141,30 @@ function quitarDelCarrito(item) {
 function confirmarCompra() {
     carrito = [];
     actualizarCarritoEnStorage();
-    mostrarProductos(productos);
+    cargarProductos();
     toggleCarrito();
-    console.log('¡Compra confirmada! Gracias por tu compra.');
+
+    Swal.fire({
+        icon: 'success',
+        title: 'Compra confirmada',
+        text: '¡Gracias por tu compra!',
+    });
+
     actualizarContadorCarrito();
 }
 
 function cancelarCompra() {
     carrito = [];
     actualizarCarritoEnStorage();
+    cargarProductos();
     toggleCarrito();
-    mostrarProductos(productos);
-    console.log('Compra cancelada. Puedes seguir agregando productos.');
+
+    Swal.fire({
+        icon: 'info',
+        title: 'Compra cancelada',
+        text: 'Puedes seguir agregando productos.',
+    });
+
     actualizarContadorCarrito();
 }
 
@@ -143,7 +172,6 @@ function filtrarProductos() {
     const filtro = document.getElementById('filtro').value.toLowerCase();
     const productosFiltrados = productos.filter(producto => producto.nombre.toLowerCase().includes(filtro));
     mostrarProductos(productosFiltrados);
-
     console.log(`Productos filtrados por: ${filtro}`);
 }
 

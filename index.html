@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carrito de Compras</title>
   <link rel="stylesheet" href="estilos.css">
+  <title>Carrito de Compras</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
-  <h1>Carrito</h1>
-  
+  <h1>Carrito de Compras</h1>
+
   <button id="verCarrito">
-  Ver Carrito <span id="cantidadCarrito">(0)</span>
+    Ver Carrito <span id="cantidadCarrito">(0)</span>
   </button>
-  
+
   <div id="filtro-container">
     <label for="filtro">Buscar Producto:</label>
     <input type="text" id="filtro" placeholder="Ingrese nombre del producto" oninput="filtrarProductos()">
@@ -22,6 +25,7 @@
 
   <div id="carrito-resumen"></div>
 
-  <script src="./JS/app.JS"></script>
+  <script src="./JS/app.js"></script>
 </body>
+
 </html>
